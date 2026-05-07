@@ -7,11 +7,6 @@ export class UserController {
 
   @Get()
   async getAllUser() {
-    return this.userService.findAll();
-  }
-
-  @Get("create")
-  async createUser() {
-    return this.userService.createUser();
+    return "users";
   }
 }
