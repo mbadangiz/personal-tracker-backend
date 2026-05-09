@@ -1,6 +1,8 @@
 import { customBaseEntity } from "src/domain/abstracts/base.entity";
-import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Profile } from "./profile.entity";
+import { TimeLogs } from "./timeLogs.entity";
+import { Todos } from "./todo.entity";
 
 @Entity()
 export class Users extends customBaseEntity<number>() {
@@ -30,4 +32,10 @@ export class Users extends customBaseEntity<number>() {
     onUpdate: "CASCADE",
   })
   profile: Profile;
+
+  @OneToMany(() => Todos, (Todos) => Todos.user)
+  todos: Todos[];
+
+  @OneToMany(() => TimeLogs, (TimeLogs) => TimeLogs.user)
+  timeLogs: TimeLogs[];
 }

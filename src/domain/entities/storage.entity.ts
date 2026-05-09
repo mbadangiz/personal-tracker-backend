@@ -1,6 +1,7 @@
-import { Column, Entity, OneToOne } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { customBaseEntity } from "../abstracts/base.entity";
 import { Profile } from "./profile.entity";
+import { TodoAttachments } from "./todoAttachments.entity";
 
 export enum StorageType {
   IMAGE = "image",
@@ -47,7 +48,13 @@ export class Storage extends customBaseEntity<string>("uuid") {
   @Column()
   path: string;
 
-  // relations
   @OneToOne(() => Profile, (profile) => profile.avatar)
   profileAvatar: Profile;
+
+  //
+  @OneToMany(
+    () => TodoAttachments,
+    (TodoAttachments) => TodoAttachments.storage,
+  )
+  todoAttachments: TodoAttachments[];
 }

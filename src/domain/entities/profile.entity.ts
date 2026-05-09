@@ -1,6 +1,14 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryColumn,
+} from "typeorm";
 import { Users } from "./users.entity";
 import { Storage } from "./storage.entity";
+import { Locations } from "./location.entity";
 
 @Entity()
 export class Profile {
@@ -36,7 +44,7 @@ export class Profile {
   bio?: string;
 
   @Column({ type: "uuid", nullable: true })
-  avatarId: string;
+  avatarId?: string;
 
   @OneToOne(() => Storage, (storage) => storage.profileAvatar, {
     onDelete: "SET NULL",
@@ -44,4 +52,43 @@ export class Profile {
   })
   @JoinColumn({ name: "avatarId" })
   avatar: Storage;
+
+  @Column({
+    type: "date",
+    nullable: true,
+  })
+  birthDate?: Date;
+
+  @Column({
+    type: "varchar",
+    nullable: true,
+  })
+  gender: "male" | "female";
+
+  @ManyToOne(() => Locations, (location) => location.profilesCountry, {
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "countryId" })
+  country: Locations;
+
+  @Column({ type: "integer", nullable: true })
+  countryId?: number;
+
+  @ManyToOne(() => Locations, (location) => location.profilesProvince, {
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "provinceId" })
+  province: Locations;
+
+  @Column({ type: "integer", nullable: true })
+  provinceId?: number;
+
+  @ManyToOne(() => Locations, (location) => location.profilesCity, {
+    onDelete: "SET NULL",
+  })
+  @JoinColumn({ name: "cityId" })
+  city: Locations;
+
+  @Column({ type: "integer", nullable: true })
+  cityId?: number;
 }
