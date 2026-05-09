@@ -3,12 +3,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryColumn,
 } from "typeorm";
 import { Users } from "./users.entity";
 import { Storage } from "./storage.entity";
 import { Locations } from "./location.entity";
+import { ProfileSocials } from "./profileSocials.entity";
 
 @Entity()
 export class Profile {
@@ -91,4 +93,7 @@ export class Profile {
 
   @Column({ type: "integer", nullable: true })
   cityId?: number;
+
+  @OneToMany(() => ProfileSocials, (ProfileSocials) => ProfileSocials.profile)
+  socials: ProfileSocials[];
 }

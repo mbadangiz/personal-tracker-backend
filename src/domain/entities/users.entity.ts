@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Profile } from "./profile.entity";
 import { TimeLogs } from "./timeLogs.entity";
 import { Todos } from "./todo.entity";
+import { Notes } from "./notes.entity";
 
 @Entity()
 export class Users extends customBaseEntity<number>() {
@@ -38,4 +39,7 @@ export class Users extends customBaseEntity<number>() {
 
   @OneToMany(() => TimeLogs, (TimeLogs) => TimeLogs.user)
   timeLogs: TimeLogs[];
+
+  @OneToMany(() => Notes, (Notes) => Notes.user)
+  note: Notes[];
 }

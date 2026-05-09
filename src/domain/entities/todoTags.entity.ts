@@ -7,8 +7,8 @@ import { Todos } from "./todo.entity";
 @Index(["tagId", "todoId"], { unique: true })
 export class TodoTags extends customBaseEntity<string>("uuid") {
   @Index()
-  @Column({ type: "uuid" })
-  tagId: string;
+  @Column({ type: "integer" })
+  tagId: number;
 
   @ManyToOne(() => Tags, (Tags) => Tags.todos, {
     onDelete: "CASCADE",
