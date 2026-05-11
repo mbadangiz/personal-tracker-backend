@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { customBaseEntity } from "../abstracts/base.entity";
 import { Profile } from "./profile.entity";
 import { TodoAttachments } from "./todoAttachments.entity";
+import { Transactions } from "./transaction.entity";
 
 export enum StorageType {
   IMAGE = "image",
@@ -57,4 +58,7 @@ export class Storage extends customBaseEntity<string>("uuid") {
     (TodoAttachments) => TodoAttachments.storage,
   )
   todoAttachments: TodoAttachments[];
+
+  @OneToMany(() => Transactions, (Transactions) => Transactions.storage)
+  transactions: Transactions[];
 }

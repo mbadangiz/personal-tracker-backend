@@ -41,7 +41,7 @@ export class Locations extends customBaseEntity<number>("increment") {
   children?: Locations[];
 
   @Column({
-    type: "enum",
+    type: "varchar",
     enum: LocationType,
   })
   type: LocationType;

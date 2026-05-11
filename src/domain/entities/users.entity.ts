@@ -4,6 +4,7 @@ import { Profile } from "./profile.entity";
 import { TimeLogs } from "./timeLogs.entity";
 import { Todos } from "./todo.entity";
 import { Notes } from "./notes.entity";
+import { FinancialAccount } from "./financialAccount.entity";
 
 @Entity()
 export class Users extends customBaseEntity<number>() {
@@ -42,4 +43,10 @@ export class Users extends customBaseEntity<number>() {
 
   @OneToMany(() => Notes, (Notes) => Notes.user)
   note: Notes[];
+
+  @OneToMany(
+    () => FinancialAccount,
+    (FinancialAccount) => FinancialAccount.user,
+  )
+  financialAccounts: FinancialAccount[];
 }
