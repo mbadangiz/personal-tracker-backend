@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from "typeorm";
 import { customBaseEntity } from "../abstracts/base.entity";
 import { Projects } from "./project.entity";
 import { TimeLogs } from "./timeLogs.entity";
@@ -24,6 +31,7 @@ export class Todos extends customBaseEntity<string>("uuid") {
   @Column({
     nullable: true,
   })
+  @Index()
   userId: string | null;
 
   @ManyToOne(() => Users, (Users) => Users.todos, {

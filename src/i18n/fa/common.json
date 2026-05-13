@@ -1,0 +1,5 @@
+{
+  "validationError": "خطای اعتبارسنجی",
+  "invalidFileType": "فرمت فایل مجاز نیست",
+  "fileTooLarge": "حجم فایل بیشتر از حد مجاز است"
+}

@@ -30,6 +30,7 @@ export class Users extends customBaseEntity<number>() {
   phoneNumber: string;
 
   @OneToOne(() => Profile, (Profile) => Profile.user, {
+    cascade: true,
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

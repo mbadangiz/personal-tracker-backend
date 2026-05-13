@@ -52,6 +52,9 @@ export class Storage extends customBaseEntity<string>("uuid") {
   @OneToOne(() => Profile, (profile) => profile.avatar)
   profileAvatar: Profile;
 
+  @Column({ default: false })
+  isUsed: boolean;
+
   //
   @OneToMany(
     () => TodoAttachments,

@@ -1,0 +1,7 @@
+{
+  "invalidFileType": "فرمت فایل مجاز نیست. فرمت‌های قابل قبول: {formats}",
+  "fileTooLarge": "حجم فایل بیشتر از حد مجاز است. حداکثر حجم مجاز: {maxSize} MB",
+  "uploadTypeNotFound": "نوع آپلود معتبر نیست",
+  "fileRequired": "فایل الزامی است",
+  "uploadSuccess": "فایل با موفقیت آپلود شد"
+}

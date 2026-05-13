@@ -1,12 +1,20 @@
 import { Module } from "@nestjs/common";
 import { AppController } from "./app.controller";
-import { AppService } from "./app.service";
 import { DatabaseModule } from "./dataAccess/database.module";
-import { UserModule } from "./user/user.module";
+import { AuthModule } from "./api/auth/auth.module";
+import { ConfigsModule } from "./config/config.module";
+import { FileStorageModule } from "./api/file-storage/file-storage.module";
+import { I18nCustomModule } from "./i18n/I18nCustom.module";
 
 @Module({
-  imports: [DatabaseModule, UserModule],
+  imports: [
+    ConfigsModule,
+    DatabaseModule,
+    AuthModule,
+    FileStorageModule,
+    I18nCustomModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

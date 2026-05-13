@@ -18,6 +18,7 @@ export class Profile {
   userId: number;
 
   @OneToOne(() => Users, (Users) => Users.profile, {
+    cascade: ["insert", "soft-remove", "update"],
     onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })

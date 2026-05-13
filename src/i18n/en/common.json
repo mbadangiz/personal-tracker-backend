@@ -1,0 +1,5 @@
+{
+  "validationError": "Validation error",
+  "invalidFileType": "Invalid file type",
+  "fileTooLarge": "File size is too large"
+}

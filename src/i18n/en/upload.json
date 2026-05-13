@@ -1,0 +1,7 @@
+{
+  "invalidFileType": "Invalid file type. Allowed formats: {formats}",
+  "fileTooLarge": "File size exceeds the allowed limit. Maximum allowed size: {maxSize} MB",
+  "uploadTypeNotFound": "Invalid upload type",
+  "fileRequired": "File is required",
+  "uploadSuccess": "File uploaded successfully"
+}
