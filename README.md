@@ -1,98 +1,192 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Work Tracker Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS backend for a personal work-tracking application. The current codebase provides authentication, JWT-protected routes, file upload handling, i18n responses, Swagger documentation, and a TypeORM domain model for todos, projects, time logs, notes, profiles, storage, and personal finance records.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- User registration and login with bcrypt password hashing
+- JWT authentication with Passport
+- Swagger API documentation at `/docs`
+- Global validation pipe with consistent error responses
+- Persian and English i18n resources for upload and validation messages
+- Single and multiple file uploads with per-type extension policies
+- SQL.js/SQLite persistence through TypeORM
+- Domain entities for:
+  - users and profiles
+  - todos, projects, tags, attachments, and time logs
+  - notes and note tags
+  - financial accounts, transactions, currencies, categories, and transfers
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- Node.js + TypeScript
+- NestJS 11
+- TypeORM 0.3
+- SQL.js with `database.sqlite`
+- Passport JWT
+- bcrypt
+- Multer
+- nestjs-i18n
+- Swagger/OpenAPI
+- pnpm
 
-```bash
-$ pnpm install
+## Requirements
+
+- Node.js 20+ recommended
+- pnpm
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+JWT_SECRET=replace-with-a-long-random-secret
 ```
 
-## Compile and run the project
+`JWT_SECRET` is required. The application fails during startup if it is missing.
+
+## Installation
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
 ```
 
-## Run tests
+## Running The App
 
 ```bash
-# unit tests
-$ pnpm run test
+# Development
+pnpm run start:dev
 
-# e2e tests
-$ pnpm run test:e2e
+# Regular start
+pnpm run start
 
-# test coverage
-$ pnpm run test:cov
+# Production build
+pnpm run build
+pnpm run start:prod
 ```
 
-## Deployment
+By default the app listens on port `3000`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Useful URLs:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- API root: `http://localhost:3000/`
+- Swagger docs: `http://localhost:3000/docs`
+
+## API Overview
+
+### Auth
+
+| Method | Path                    | Description              |
+| ------ | ----------------------- | ------------------------ |
+| `POST` | `/auth/create-new-user` | Register a new user      |
+| `POST` | `/auth/login`           | Login and receive a JWT  |
+| `POST` | `/auth/oo`              | Test protected JWT route |
+
+Registration body:
+
+```json
+{
+  "username": "demo_user",
+  "email": "demo@example.com",
+  "password": "secret123",
+  "phoneNumber": "09123456789"
+}
+```
+
+Login body:
+
+```json
+{
+  "usernameOrEmailOrPhone": "demo_user",
+  "password": "secret123"
+}
+```
+
+Protected requests use a bearer token:
+
+```http
+Authorization: Bearer <token>
+```
+
+### File Storage
+
+| Method | Path                                       | Description                            |
+| ------ | ------------------------------------------ | -------------------------------------- |
+| `POST` | `/file-storage/single-upload?type=general` | Upload one file in field `file`        |
+| `POST` | `/file-storage/multi-upload?type=general`  | Upload multiple files in field `files` |
+
+Supported upload `type` values:
+
+| Type         | Allowed extensions                                                                | Policy limit   |
+| ------------ | --------------------------------------------------------------------------------- | -------------- |
+| `avatar`     | `.jpg`, `.jpeg`, `.png`, `.webp`                                                  | 1 MB, 1 file   |
+| `attachment` | `.pdf`, `.doc`, `.docx`, `.jpg`, `.jpeg`, `.png`, `.xlsx`, `.xls`, `.txt`, `.zip` | 50 MB, 5 files |
+| `video`      | `.mp4`, `.mov`, `.avi`, `.mkv`, `.webm`                                           | 500 MB, 1 file |
+| `general`    | `.jpg`, `.jpeg`, `.png`, `.pdf`, `.mp4`, `.mp3`                                   | 20 MB, 5 files |
+
+Uploaded files are stored in `./uploads`.
+
+## Internationalization
+
+The app loads translations from `src/i18n` and falls back to Persian (`fa`). Language can be selected with:
+
+- `?lang=en` query parameter
+- `lang` header
+- `Accept-Language` header
+
+Swagger also documents an optional `accept-language` header.
+
+## Database
+
+The project currently uses TypeORM with SQL.js:
+
+- Database file: `database.sqlite`
+- Entity discovery: `src/**/*.entity.ts` and compiled `dist/**/*.entity.js`
+- `synchronize: true` is enabled for development convenience
+
+For production, consider disabling `synchronize` and replacing it with migrations.
+
+## Project Structure
+
+```text
+src/
+  api/
+    auth/                 # Auth controller, module, service
+    file-storage/         # Upload endpoints
+  application/
+    dto/                  # Request DTOs
+    policy/               # Upload policies
+  config/                 # Global Nest config module
+  dataAccess/             # TypeORM database module
+  decorators/             # Upload Swagger/interceptor decorators
+  domain/
+    abstracts/            # Base entity and shared response interfaces
+    entities/             # TypeORM entities
+  guards/                 # JWT auth guard
+  i18n/                   # fa/en translation files
+  interceptors/           # Multer upload interceptors
+  lib/                    # Swagger and validation bootstrap helpers
+  strategies/             # Passport JWT strategy
+  utils/                  # Upload validation helpers
+```
+
+## Scripts
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm run build       # Compile the Nest application
+pnpm run start       # Start once
+pnpm run start:dev   # Start in watch mode
+pnpm run start:prod  # Run compiled dist/main
+pnpm run lint        # Run ESLint with auto-fix
+pnpm run format      # Format src and test TypeScript files
+pnpm run test        # Run unit tests
+pnpm run test:cov    # Run tests with coverage
+pnpm run test:e2e    # Run e2e tests
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Development Notes
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Keep `.env`, `database.sqlite`, `uploads/`, `dist/`, and `node_modules/` out of commits.
+- The current API surface is small compared with the domain model; many entities are ready for future modules but do not yet have controllers/services.
+- Upload policy metadata includes max size/count, but the current validators should be checked before relying on those limits in production.
+- CORS is currently open to all origins in `src/main.ts`; restrict it before public deployment.

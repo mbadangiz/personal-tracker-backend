@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, Index, OneToMany } from "typeorm";
 import { customBaseEntity } from "../abstracts/base.entity";
 import { TodoTags } from "./todoTags.entity";
 import { Notes } from "./notes.entity";
@@ -18,6 +18,10 @@ export class Tags extends customBaseEntity<number>("increment") {
     nullable: true,
   })
   description?: string;
+
+  @Column({ type: "integer" })
+  @Index()
+  userId: number;
 
   @OneToMany(() => TodoTags, (TodoTags) => TodoTags.tag)
   todos: TodoTags[];
